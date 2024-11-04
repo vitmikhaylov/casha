@@ -35,6 +35,10 @@ class Category(models.Model):
     def __str__(self) -> str:
         return self.name
     
+    class Meta:
+        verbose_name = 'Category'
+        verbose_name_plural = 'Categories'
+    
 class Tag(models.Model):
     tag = models.CharField(max_length=150, db_index=True)
     slug = models.SlugField(max_length=150, unique=True, db_index=True)
