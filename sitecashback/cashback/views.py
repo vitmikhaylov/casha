@@ -1,8 +1,9 @@
 from typing import Any
+from django.db.models.base import Model as Model
 from django.db.models.query import QuerySet
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
-from django.views.generic import ListView
+from django.views.generic import DetailView, ListView
 
 from .models import Article
 
@@ -58,11 +59,30 @@ def login(request):
 def page_not_found(request, exception):
     return HttpResponse("The page not found")
 
+
 def show_post(request, post_slug):
     post = get_object_or_404(Article, slug=post_slug)
     data = {
-        'title': post.title,
-        'menu': menu,
-        'post': post,
+        "title": post.title,
+        "menu": menu,
+        "post": post,
     }
-    return render(request, 'cashback/show_post.html', data)
+    return render(request, "cashback/post.html", data)
+
+
+class ShowPost(DetailView):
+    model = Article
+    template_name = "cashback/post.html"
+    slug_url_kwarg = "post_slug"
+    context_object_name = "post"
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["title"] = context["post"].title
+        context["menu"] = menu
+        return context
+
+    def get_object(self, queryset: QuerySet[Any] | None = ...) -> Model:
+        return get_object_or_404(
+            Article, is_published=True, slug=self.kwargs[self.slug_url_kwarg]
+        )

@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>{{ title }}</h1>
-<ul>
-    {{ post.content}}
-</ul>
+<h2>{{ title }}</h2>
+
+{{ post.content|linebreaks }}
+
 {% endblock content %}
 
