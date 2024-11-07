@@ -86,24 +86,43 @@ class ShowPost(DetailView):
         return get_object_or_404(
             Article, is_published=True, slug=self.kwargs[self.slug_url_kwarg]
         )
-    
+
+
 def show_category(request, category_slug):
     category = get_object_or_404(Category, slug=category_slug)
     posts = Article.objects.filter(category_id=category.pk)
     data = {
-        'title': f'Category: {category.name}',
-        'menu': menu,
-        'posts': posts,
+        "title": f"Category: {category.name}",
+        "menu": menu,
+        "posts": posts,
     }
-    return render(request, 'cashback/index.html', data)
+    return render(request, "cashback/index.html", data)
+
+
+class ArticleCategory(ListView):
+    template_name = "cashback/index.html"
+    context_object_name = "posts"
+    allow_empty = False
+
+    def get_queryset(self) -> QuerySet[Any]:
+        return Article.objects.filter(
+            is_published=True, category__slug=self.kwargs["category_slug"]
+        ).select_related("category")
+    
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        category = context['posts'][0].category
+        context['title'] = f'Category: {category.name}'
+        context['menu'] = menu
+        return context
 
 
 def show_tag_postlist(request, tag_slug):
     tag = get_object_or_404(Tag, slug=tag_slug)
     posts = tag.tags.filter(is_published=True)
     data = {
-        'title': f'Tag: {tag.tag}',
-        'menu': menu,
-        'posts': posts,
+        "title": f"Tag: {tag.tag}",
+        "menu": menu,
+        "posts": posts,
     }
-    return render(request, 'cashback/index.html', data)
+    return render(request, "cashback/index.html", data)

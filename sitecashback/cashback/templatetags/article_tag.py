@@ -7,7 +7,7 @@ register = template.Library()
 
 @register.inclusion_tag('cashback/list_categories.html')
 def show_categories():
-    cats = Category.objects.all()
+    cats: BaseManager[Category] = Category.objects.all()
     return {'cats': cats}
 
 @register.inclusion_tag('cashback/list_tags.html')
