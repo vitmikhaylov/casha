@@ -91,7 +91,7 @@ def show_category(request, category_slug):
     category = get_object_or_404(Category, slug=category_slug)
     posts = Article.objects.filter(category_id=category.pk)
     data = {
-        'title': f'Category {category.name}',
+        'title': f'Category: {category.name}',
         'menu': menu,
         'posts': posts,
     }

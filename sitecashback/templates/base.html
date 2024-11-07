@@ -1,3 +1,5 @@
+{% load article_tag %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,6 +14,10 @@
             <li><a href="{% url m.url_name %}">{{ m.title }}</a></li>
         {% endfor %}
     </ul>
+
+{% show_categories %}
+{% show_tags %}
+
 {% block content %}
 {% endblock content %}
 </body>
