@@ -1,11 +1,11 @@
 from typing import Any
-from django.db.models.base import Model as Model
+from django.db.models.base import Model
 from django.db.models.query import QuerySet
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import DetailView, ListView
 
-from .models import Article
+from .models import Article, Category, Tag
 
 from .utils import menu
 
@@ -86,3 +86,24 @@ class ShowPost(DetailView):
         return get_object_or_404(
             Article, is_published=True, slug=self.kwargs[self.slug_url_kwarg]
         )
+    
+def show_category(request, category_slug):
+    category = get_object_or_404(Category, slug=category_slug)
+    posts = Article.objects.filter(category_id=category.pk)
+    data = {
+        'title': f'Category {category.name}',
+        'menu': menu,
+        'posts': posts,
+    }
+    return render(request, 'cashback/index.html', data)
+
+
+def show_tag_postlist(request, tag_slug):
+    tag = get_object_or_404(Tag, slug=tag_slug)
+    posts = tag.tags.filter(is_published=True)
+    data = {
+        'title': f'Tag: {tag.tag}',
+        'menu': menu,
+        'posts': posts,
+    }
+    return render(request, 'cashback/index.html', data)

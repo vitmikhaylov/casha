@@ -5,7 +5,7 @@ from .models import Article, Category, Tag
 
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
-    fields = ["title", "slug", "content", "is_published", "category"]
+    fields = ["title", "slug", "content", "is_published", "category", "tags"]
     list_display = (
         "id",
         "title",
