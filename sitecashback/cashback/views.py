@@ -126,3 +126,21 @@ def show_tag_postlist(request, tag_slug):
         "posts": posts,
     }
     return render(request, "cashback/index.html", data)
+
+
+class TagPostList(ListView):
+    template_name = "cashback/index.html"
+    context_object_name = "posts"
+    allow_empty = False
+
+    def get_queryset(self) -> QuerySet[Any]:
+        return Article.objects.filter(
+            is_published=True, tags__slug=self.kwargs["tag_slug"]
+        ).select_related("category")
+    
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        tag = Tag.objects.get(slug=self.kwargs['tag_slug'])
+        context['title'] = f'Tag: {tag.tag }'
+        context['menu'] = menu
+        return context
