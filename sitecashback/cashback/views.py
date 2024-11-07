@@ -1,7 +1,7 @@
 from typing import Any
 from django.db.models.query import QuerySet
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.views.generic import ListView
 
 from .models import Article
@@ -57,3 +57,12 @@ def login(request):
 
 def page_not_found(request, exception):
     return HttpResponse("The page not found")
+
+def show_post(request, post_slug):
+    post = get_object_or_404(Article, slug=post_slug)
+    data = {
+        'title': post.title,
+        'menu': menu,
+        'post': post,
+    }
+    return render(request, 'cashback/show_post.html', data)
