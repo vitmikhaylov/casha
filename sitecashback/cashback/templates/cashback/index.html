@@ -4,8 +4,9 @@
 <h1>{{ title }}</h1>
 {% for p in posts %}
 <ul>
-    <li><h2>{{ p.title }}</h2></li>
-    <p>{{ p.content }}</p>
+    <h2>{{ p.title }}</h2>
+    <p>{{ p.content|linebreaks|truncatewords:40 }}</p>
+    <a href="{% url "post" post_slug=p.slug %}">Read post</a>
 </ul>
 {% endfor %} 
 {% endblock content %}
