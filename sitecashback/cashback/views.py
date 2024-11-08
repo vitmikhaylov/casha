@@ -5,31 +5,9 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import DetailView, ListView
 
-from .models import Article, Category, Tag
+from .models import Article, Tag
 
 from .utils import DataMixin, menu
-
-
-def index(request):
-    posts = Article.objects.all()
-    data = {
-        "title": "Home",
-        "menu": menu,
-        "posts": posts,
-    }
-    return render(request, "cashback/index.html", data)
-
-
-# class CashbackHome(ListView):
-#     template_name = "cashback/index.html"
-#     context_object_name = "posts"
-#     extra_context = {
-#         "title": "Home page",
-#         "menu": menu,
-#     }
-
-#     def get_queryset(self) -> QuerySet[Any]:
-#         return Article.objects.filter(is_published=True).select_related("category")
 
 
 class CashbackHome(DataMixin, ListView):
@@ -69,34 +47,6 @@ def page_not_found(request, exception):
     return HttpResponse("The page not found")
 
 
-def show_post(request, post_slug):
-    post = get_object_or_404(Article, slug=post_slug)
-    data = {
-        "title": post.title,
-        "menu": menu,
-        "post": post,
-    }
-    return render(request, "cashback/post.html", data)
-
-
-# class ShowPost(DetailView):
-#     model = Article
-#     template_name = "cashback/post.html"
-#     slug_url_kwarg = "post_slug"
-#     context_object_name = "post"
-
-#     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
-#         context = super().get_context_data(**kwargs)
-#         context["title"] = context["post"].title
-#         context["menu"] = menu
-#         return context
-
-#     def get_object(self, queryset: QuerySet[Any] | None = ...) -> Model:
-#         return get_object_or_404(
-#             Article, is_published=True, slug=self.kwargs[self.slug_url_kwarg]
-#         )
-
-
 class ShowPost(DataMixin, DetailView):
     template_name = "cashback/post.html"
     slug_url_kwarg = "post_slug"
@@ -110,35 +60,6 @@ class ShowPost(DataMixin, DetailView):
         return get_object_or_404(
             Article, is_published=True, slug=self.kwargs[self.slug_url_kwarg]
         )
-
-
-def show_category(request, category_slug):
-    category = get_object_or_404(Category, slug=category_slug)
-    posts = Article.objects.filter(category_id=category.pk)
-    data = {
-        "title": f"Category: {category.name}",
-        "menu": menu,
-        "posts": posts,
-    }
-    return render(request, "cashback/index.html", data)
-
-
-# class ArticleCategory(ListView):
-#     template_name = "cashback/index.html"
-#     context_object_name = "posts"
-#     allow_empty = False
-
-#     def get_queryset(self) -> QuerySet[Any]:
-#         return Article.objects.filter(
-#             is_published=True, category__slug=self.kwargs["category_slug"]
-#         ).select_related("category")
-
-#     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
-#         context = super().get_context_data(**kwargs)
-#         category = context["posts"][0].category
-#         context["title"] = f"Category: {category.name}"
-#         context["menu"] = menu
-#         return context
 
 
 class ArticleCategory(DataMixin, ListView):
@@ -157,35 +78,6 @@ class ArticleCategory(DataMixin, ListView):
         return self.get_mixin_context(
             context, title=f"Category {category.name}", cat_selected=category.pk
         )
-
-
-def show_tag_postlist(request, tag_slug):
-    tag = get_object_or_404(Tag, slug=tag_slug)
-    posts = tag.tags.filter(is_published=True)
-    data = {
-        "title": f"Tag: {tag.tag}",
-        "menu": menu,
-        "posts": posts,
-    }
-    return render(request, "cashback/index.html", data)
-
-
-# class TagPostList(ListView):
-#     template_name = "cashback/index.html"
-#     context_object_name = "posts"
-#     allow_empty = False
-
-#     def get_queryset(self) -> QuerySet[Any]:
-#         return Article.objects.filter(
-#             is_published=True, tags__slug=self.kwargs["tag_slug"]
-#         ).select_related("category")
-
-#     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
-#         context = super().get_context_data(**kwargs)
-#         tag = Tag.objects.get(slug=self.kwargs["tag_slug"])
-#         context["title"] = f"Tag: {tag.tag}"
-#         context["menu"] = menu
-#         return context
 
 
 class TagPostList(DataMixin, ListView):
