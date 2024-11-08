@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 
 class Article(models.Model):
@@ -27,6 +28,10 @@ class Article(models.Model):
         verbose_name_plural = "Posts"
         indexes = [models.Index(fields=["created_at"])]
 
+    def get_absolute_url(self):
+        return reverse("post", kwargs={"post_slug": self.slug})
+    
+
 
 class Category(models.Model):
     name = models.CharField(max_length=150, db_index=True)
@@ -38,6 +43,9 @@ class Category(models.Model):
     class Meta:
         verbose_name = 'Category'
         verbose_name_plural = 'Categories'
+
+    def get_absolute_url(self):
+        return reverse("category", kwargs={"category_slug": self.slug})
     
 class Tag(models.Model):
     tag = models.CharField(max_length=150, db_index=True)
@@ -45,3 +53,6 @@ class Tag(models.Model):
 
     def __str__(self) -> str:
         return self.tag
+
+    def get_absolute_url(self):
+        return reverse("tag", kwargs={"tag_slug": self.slug})

@@ -2,7 +2,7 @@
     <p>Tags:</p>
     <ul>
         {% for t in tags %}
-            <li><a href="{% url "tag" tag_slug=t.slug %}">{{ t.tag }}</a></li>
+            <li><a href="{{ t.get_absolute_url }}">{{ t.tag }}</a></li>
         {% endfor %}
     </ul>
 {% endif %}

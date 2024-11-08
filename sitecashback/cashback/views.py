@@ -108,12 +108,12 @@ class ArticleCategory(ListView):
         return Article.objects.filter(
             is_published=True, category__slug=self.kwargs["category_slug"]
         ).select_related("category")
-    
+
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        category = context['posts'][0].category
-        context['title'] = f'Category: {category.name}'
-        context['menu'] = menu
+        category = context["posts"][0].category
+        context["title"] = f"Category: {category.name}"
+        context["menu"] = menu
         return context
 
 
@@ -137,10 +137,10 @@ class TagPostList(ListView):
         return Article.objects.filter(
             is_published=True, tags__slug=self.kwargs["tag_slug"]
         ).select_related("category")
-    
+
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        tag = Tag.objects.get(slug=self.kwargs['tag_slug'])
-        context['title'] = f'Tag: {tag.tag }'
-        context['menu'] = menu
+        tag = Tag.objects.get(slug=self.kwargs["tag_slug"])
+        context["title"] = f"Tag: {tag.tag }"
+        context["menu"] = menu
         return context
