@@ -21,7 +21,7 @@ from django.views.defaults import page_not_found
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('cashback/', include('cashback.urls')),
-    path('users/', include('users.urls')),
+    path('users/', include('users.urls', namespace='users')),
 ]
 
 handler404 = page_not_found
