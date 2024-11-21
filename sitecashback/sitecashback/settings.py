@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_extensions",
     "cashback.apps.CashbackConfig",
+    "users.apps.UsersConfig",
 ]
 
 MIDDLEWARE = [
