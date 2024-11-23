@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Welcome</h1>
+
+<p>
+You have successfully registered on the site! You need to authorize to log in. Follow the link:
+<a href="{% url 'users:login' %}">link</a>
+</p>
+{% endblock content %}
+
+

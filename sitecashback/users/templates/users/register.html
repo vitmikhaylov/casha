@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Registration</h1>
+
+<form action="" method='post'>
+    {% csrf_token %}
+    <input type="hidden" name="next" value="{{ next }}" />
+    <div>{{ form.non_field_errors }}</div>
+    {% for f in form %}
+    <p><label for="{{ f.id_for_label }}">{{ f.label }}</label> {{ f }}</p>
+    <div>{{ f.errors }}</div>
+    {% endfor %}
+    {% comment %} {{ form.as_p }} {% endcomment %}
+    <p><button type='submit'>Registration</button></p>
+</form>
+{% endblock content %}
+
